@@ -5,7 +5,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>pokemon</title>
+        <title>POKEMON !!</title>
       </Head>
       <Component {...pageProps} />
     </>
