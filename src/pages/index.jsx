@@ -42,11 +42,17 @@ export default function Home() {
     <>
       <HomeLayout>
         <div className="text-center mt-4">
-          <div style={{ fontFamily: "pokemon-font", fontSize: "2rem" }}>
+          <div
+            style={{
+              fontFamily: "pokemon-font",
+              fontSize: "2rem",
+              color: "gray",
+            }}
+          >
             ポケモンリスト
           </div>
         </div>
-        <div className="text-right p-2 underline">
+        <div className="text-right p-4 underline">
           <a href="https://github.com/mitsuki3553/tryPoke" target="_blank">
             <FontAwesomeIcon
               icon={faGithub}
@@ -56,7 +62,12 @@ export default function Home() {
                 borderRadius: "9999px",
               }}
             />
-            <span className="pl-1 text-blue-700">github</span>
+            <span
+              className="ml-1 text-blue-700"
+              style={{ fontFamily: "pokemon-font", fontSize: "12px" }}
+            >
+              unowngunowniunownt unownhunownuunownb
+            </span>
           </a>
         </div>
         <div className="text-center text-lg">
