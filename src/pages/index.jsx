@@ -9,7 +9,7 @@ export default function Home() {
   const [P, setP] = useState(); //pokeAPIを使うためのメソッド入れ
   const [pokemons, setPokemons] = useState([]); //fetchした詳細データ入れ
   const [limit, setLimit] = useState(0); //取得するデータ数
-  const [offset, setOffset] = useState(2); //この番号からのデータ取得
+  const [offset, setOffset] = useState(1); //この番号からのデータ取得
   const [until, setUntil] = useState(1); //この番号までのデータ取得
   const [onLoad, setOnLoad] = useState(false); //fetch中かどうか
 
@@ -46,8 +46,8 @@ export default function Home() {
     const val = e.target.value;
     //数字かつ898以下なら
     if (!isNaN(val) && val <= 898) {
-      setOffset(val.trim()); //入力した番号のポケモンまで
-      setLimit(until - val + 1); //データ数
+      setOffset(val.trim()); //入力した番号のポケモンから
+      setLimit(until - val + 1); //データ数を更新
     }
   };
   //〜○番の入力時の処理
@@ -56,7 +56,7 @@ export default function Home() {
     //数字かつ898以下なら
     if (!isNaN(val) && val <= 898) {
       setUntil(val.trim()); //入力した番号のポケモンまで
-      setLimit(val - offset + 1); //データ数
+      setLimit(val - offset + 1); //データ数を更新
     }
   };
 
