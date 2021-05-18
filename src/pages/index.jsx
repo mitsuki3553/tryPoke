@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Pokedex } from "pokeapi-js-wrapper";
 
-import { HomeLayout, ShowPokemons, Header } from "src/components/";
-//fontAwesomeから
-import { FontAwesomeIcon, faGithub, faSearchPlus } from "src/components";
+import { HomeLayout, ShowPokemons, Header, Search } from "src/components/";
 
 export default function Home() {
   const [P, setP] = useState(); //pokeAPIを使うためのメソッド入れ
@@ -19,7 +17,7 @@ export default function Home() {
     setP(Poke);
     setLimit(limit - offset + 1);
   }, []);
-  console.log(`データ数：${limit}, 開始値：${offset}, 終了値：${until}`);
+  // console.log(`データ数：${limit}, 開始値：${offset}, 終了値：${until}`);
 
   //データを取得
   const getPoke = async () => {
@@ -64,50 +62,14 @@ export default function Home() {
     <>
       <HomeLayout>
         <Header />
-
-        <div className="text-center text-lg">
-          <span>No. </span>
-          <input
-            type="text"
-            className="bg-black text-white px-2 rounded-md w-16 mt-5 mx-auto outline-none"
-            value={offset}
-            onChange={(e) => isOffset(e)}
-          />
-          <span> から No. </span>
-          <input
-            type="text"
-            className="bg-black text-white px-2 rounded-md w-16 mt-5 mx-auto outline-none"
-            value={until}
-            onChange={(e) => isUntil(e)}
-          />
-          <span>までのポケモン</span>
-        </div>
-        <div
-          className="text-center text-sm text-blue-700"
-          style={{ fontFamily: "pokemon-font" }}
-        >
-          ※ No. 898 までだよ！
-        </div>
-        <button
-          disabled={!offset || !until || limit === 0}
-          onClick={() => getPoke()}
-          className={
-            offset > 0 && limit > 0 && offset <= until
-              ? "w-32 mx-auto m-5 text-center border border-green-700 rounded-md bg-green-700 text-white cursor-pointer"
-              : "w-32 mx-auto m-5 text-center border border-green-700 rounded-md bg-green-700 text-white opacity-20 "
-          }
-        >
-          <FontAwesomeIcon icon={faSearchPlus} />
-          <span
-            style={{
-              fontFamily: "pokemon-font",
-              fontSize: "16px",
-              marginLeft: "8px",
-            }}
-          >
-            ひょうじ
-          </span>
-        </button>
+        <Search
+          offset={offset}
+          until={until}
+          limit={limit}
+          isOffset={isOffset}
+          isUntil={isUntil}
+          getPoke={getPoke}
+        />
 
         <ShowPokemons pokemons={pokemons} onLoad={onLoad} />
       </HomeLayout>
