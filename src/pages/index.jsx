@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Pokedex } from "pokeapi-js-wrapper";
 
-import { HomeLayout, ShowPokemons } from "src/components/";
+import { HomeLayout, ShowPokemons, Header } from "src/components/";
 //fontAwesomeから
 import { FontAwesomeIcon, faGithub, faSearchPlus } from "src/components";
 
 export default function Home() {
   const [P, setP] = useState(); //pokeAPIを使うためのメソッド入れ
   const [pokemons, setPokemons] = useState([]); //fetchした詳細データ入れ
-  const [limit, setLimit] = useState(0); //取得するデータ数
+  const [limit, setLimit] = useState(1); //取得するデータ数
   const [offset, setOffset] = useState(1); //この番号からのデータ取得
   const [until, setUntil] = useState(1); //この番号までのデータ取得
   const [onLoad, setOnLoad] = useState(false); //fetch中かどうか
@@ -63,35 +63,8 @@ export default function Home() {
   return (
     <>
       <HomeLayout>
-        <div className="text-center mt-4">
-          <div
-            style={{
-              fontFamily: "pokemon-font",
-              fontSize: "2rem",
-              color: "gray",
-            }}
-          >
-            ポケモンリスト
-          </div>
-        </div>
-        <div className="text-right p-4 underline">
-          <a href="https://github.com/mitsuki3553/tryPoke" target="_blank">
-            <FontAwesomeIcon
-              icon={faGithub}
-              size="1x"
-              style={{
-                backgroundColor: "white",
-                borderRadius: "9999px",
-              }}
-            />
-            <span
-              className="ml-1 text-blue-700"
-              style={{ fontFamily: "pokemon-font", fontSize: "12px" }}
-            >
-              github
-            </span>
-          </a>
-        </div>
+        <Header />
+
         <div className="text-center text-lg">
           <span>No. </span>
           <input
