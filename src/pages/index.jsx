@@ -71,7 +71,7 @@ export default function Home() {
           getPoke={getPoke}
         />
 
-        <ShowPokemons pokemons={pokemons} onLoad={onLoad} />
+        <ShowPokemons pokemons={pokemons} onLoad={onLoad} offset={offset} />
       </HomeLayout>
     </>
   );

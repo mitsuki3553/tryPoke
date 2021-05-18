@@ -1,4 +1,4 @@
-export const ShowPokemons = ({ pokemons, onLoad }) => {
+export const ShowPokemons = ({ pokemons, onLoad, offset }) => {
   if (onLoad)
     return (
       <div
@@ -18,8 +18,9 @@ export const ShowPokemons = ({ pokemons, onLoad }) => {
               alt="pokemon"
               className="mx-auto "
             ></img>
+
             <div style={{ fontFamily: "pokemon-font", fontSize: "8px" }}>
-              {item.name}
+              {+offset + i}.{item.name}
             </div>
             <div></div>
           </div>
