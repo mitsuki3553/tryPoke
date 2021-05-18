@@ -1,5 +1,13 @@
 export const ShowPokemons = ({ pokemons, onLoad }) => {
-  if (onLoad) return <div className="text-center">読込中...</div>;
+  if (onLoad)
+    return (
+      <div
+        className="text-center"
+        style={{ fontFamily: "pokemon-font", fontSize: "32px" }}
+      >
+        つうしんちゅう...
+      </div>
+    );
   return (
     <div className="mt-5 mx-auto flex flex-wrap text-center">
       {pokemons.map((item, i) => {
