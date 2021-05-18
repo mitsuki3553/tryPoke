@@ -1,4 +1,3 @@
-import { FontAwesomeIcon, faSearchPlus } from "src/components";
 import { SearchText } from "src/components";
 import { SearchButton } from "src/components";
 
