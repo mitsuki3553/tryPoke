@@ -1,7 +1,7 @@
 //自作コンポーネント
 export { HomeLayout } from "src/components/HomeLayout";
 export { ShowPokemons } from "src/components/ShowPokemons";
-export { SearchComp } from "src/components/searchComp";
+export { SearchComp } from "src/components/SearchComp";
 
 //fontAwesome関連
 export { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
