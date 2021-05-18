@@ -6,20 +6,29 @@ import { HomeLayout, ShowPokemons } from "src/components/";
 import { FontAwesomeIcon, faGithub, faSearchPlus } from "src/components";
 
 export default function Home() {
-  const [P, setP] = useState();
-  const [pokemons, setPokemons] = useState([]);
-  const [Limit, setLimit] = useState(1);
-  const [Offset, setOffset] = useState(1);
-  const [onLoad, setOnLoad] = useState(false);
+  const [P, setP] = useState(); //pokeAPIを使うためのメソッド入れ
+  const [pokemons, setPokemons] = useState([]); //fetchした詳細データ入れ
+  const [limit, setLimit] = useState(0); //取得するデータ数
+  const [offset, setOffset] = useState(2); //この番号からのデータ取得
+  const [until, setUntil] = useState(1); //この番号までのデータ取得
+  const [onLoad, setOnLoad] = useState(false); //fetch中かどうか
 
+  //pokeAPIメソッドを使えるようにする
   useEffect(() => {
     const Poke = new Pokedex();
     setP(Poke);
+    setLimit(limit - offset + 1);
   }, []);
+  console.log(`データ数：${limit}, 開始値：${offset}, 終了値：${until}`);
 
+  //データを取得
   const getPoke = async () => {
     setOnLoad(true);
-    const res = await P.resource(`/api/v2/pokemon?limit=${Limit}`);
+    const start = offset - 1;
+    const res = await P.resource(
+      `/api/v2/pokemon?limit=${limit}&offset=${start}`
+    );
+    console.log(res);
     const getDetails = async (results) => {
       let arr = [];
       for (let item of results) {
@@ -32,10 +41,23 @@ export default function Home() {
     setOnLoad(false);
   };
 
+  //○番〜の入力時の処理
   const isOffset = (e) => {
     const val = e.target.value;
-
-    !isNaN(val) && val <= 898 && setLimit(val.trim());
+    //数字かつ898以下なら
+    if (!isNaN(val) && val <= 898) {
+      setOffset(val.trim()); //入力した番号のポケモンまで
+      setLimit(until - val + 1); //データ数
+    }
+  };
+  //〜○番の入力時の処理
+  const isUntil = (e) => {
+    const val = e.target.value;
+    //数字かつ898以下なら
+    if (!isNaN(val) && val <= 898) {
+      setUntil(val.trim()); //入力した番号のポケモンまで
+      setLimit(val - offset + 1); //データ数
+    }
   };
 
   return (
@@ -66,23 +88,24 @@ export default function Home() {
               className="ml-1 text-blue-700"
               style={{ fontFamily: "pokemon-font", fontSize: "12px" }}
             >
-              unowngunowniunownt unownhunownuunownb
+              github
             </span>
           </a>
         </div>
         <div className="text-center text-lg">
-          <span>No. {Offset}</span>
-          {/* <input
+          <span>No. </span>
+          <input
             type="text"
             className="bg-black text-white px-2 rounded-md w-16 mt-5 mx-auto outline-none"
-            value="1"
-          /> */}
+            value={offset}
+            onChange={(e) => isOffset(e)}
+          />
           <span> から No. </span>
           <input
             type="text"
             className="bg-black text-white px-2 rounded-md w-16 mt-5 mx-auto outline-none"
-            value={Limit}
-            onChange={(e) => isOffset(e)}
+            value={until}
+            onChange={(e) => isUntil(e)}
           />
           <span>までのポケモン</span>
         </div>
@@ -92,11 +115,11 @@ export default function Home() {
         >
           ※ No. 898 までだよ！
         </div>
-        <div
-          disabled={!Limit}
+        <button
+          disabled={!offset || !until || limit === 0}
           onClick={() => getPoke()}
           className={
-            Limit
+            offset > 0 && limit > 0 && offset <= until
               ? "w-32 mx-auto m-5 text-center border border-green-700 rounded-md bg-green-700 text-white cursor-pointer"
               : "w-32 mx-auto m-5 text-center border border-green-700 rounded-md bg-green-700 text-white opacity-20 "
           }
@@ -111,7 +134,7 @@ export default function Home() {
           >
             ひょうじ
           </span>
-        </div>
+        </button>
 
         <ShowPokemons pokemons={pokemons} onLoad={onLoad} />
       </HomeLayout>
