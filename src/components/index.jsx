@@ -1,7 +1,8 @@
 //自作コンポーネント
+export { Header } from "src/components/Header";
 export { HomeLayout } from "src/components/HomeLayout";
 export { ShowPokemons } from "src/components/ShowPokemons";
-export { Header } from "src/components/Header";
+export { TypeCheck } from "src/components/TypeCheck";
 export { Search } from "src/components/Search/Search";
 export { SearchText } from "src/components/Search/SearchText";
 export { SearchButton } from "src/components/Search/SearchButton";
