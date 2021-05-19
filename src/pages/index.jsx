@@ -19,12 +19,11 @@ export default function Home() {
     setLimit(limit - offset + 1);
     getIndex(Poke);
   }, []);
-  // console.log(`データ数：${limit}, 開始値：${offset}, 終了値：${until}`);
 
   const getIndex = async (Poke) => {
     setOnLoad(true);
     const start = 0;
-    const Allpokemon = 897;
+    const Allpokemon = 898; //ポケモンの種類　※フォルムチェンジなし
     const res = await Poke.resource(
       `/api/v2/pokemon?limit=${Allpokemon}&offset=${start}`
     );
@@ -41,12 +40,12 @@ export default function Home() {
       const res = await P.resource(item.url);
       //必要なデータだけ抜粋
       const newFeature = {
-        order: res.order,
+        id: res.id,
         name: res.name,
         height: res.height,
         weight: res.weight,
         sprites: res.sprites,
-        types: res.types,
+        types: res.types.map((t) => t.type.name),
       };
       //抜き出したデータで配列作成
       arr = [...arr, newFeature];
@@ -64,10 +63,8 @@ export default function Home() {
       jp = [...jp, addJp];
     }
     setPokemons(() => [...jp]);
-    console.log(jp);
     setOnLoad(false);
   };
-
   //○番〜の入力時の処理
   const isOffset = (e) => {
     const val = e.target.value;
@@ -98,8 +95,8 @@ export default function Home() {
           isOffset={isOffset}
           isUntil={isUntil}
           getPoke={getPoke}
+          onLoad={onLoad}
         />
-
         <ShowPokemons pokemons={pokemons} onLoad={onLoad} offset={offset} />
       </HomeLayout>
     </>

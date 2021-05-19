@@ -2,7 +2,8 @@ import { SearchText } from "src/components";
 import { SearchButton } from "src/components";
 
 export const Search = (props) => {
-  const { offset, until, limit, isOffset, isUntil, getPoke } = props;
+  const { offset, until, limit, isOffset, isUntil, getPoke, onLoad } = props;
+
   return (
     <div className="text-center">
       <SearchText
@@ -23,6 +24,7 @@ export const Search = (props) => {
         until={until}
         limit={limit}
         getPoke={getPoke}
+        onLoad={onLoad}
       />
     </div>
   );
