@@ -21,7 +21,7 @@ export const ShowPokemons = ({ pokemons, onLoad }) => {
 
             <div style={{ fontFamily: "pokemon-font", fontSize: "8px" }}>
               <div>
-                {item.order}.{item.Ja}
+                {item.id}.{item.Ja}
               </div>
               <div>
                 {item.types.map((t) => (
