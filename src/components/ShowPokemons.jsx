@@ -1,6 +1,6 @@
-import { TypeCheck } from "src/components";
+import { typeCheck } from "src/components";
 
-export const ShowPokemons = ({ pokemons, onLoad }) => {
+export const ShowPokemons = ({ pokemons, onLoad, fetchFail }) => {
   if (onLoad)
     return (
       <div
@@ -8,6 +8,15 @@ export const ShowPokemons = ({ pokemons, onLoad }) => {
         style={{ fontFamily: "pokemon-font", fontSize: "32px" }}
       >
         つうしんちゅう...
+      </div>
+    );
+  if (fetchFail)
+    return (
+      <div
+        className="text-center"
+        style={{ fontFamily: "pokemon-font", fontSize: "32px" }}
+      >
+        つうしんにしっぱいしました
       </div>
     );
   return (
@@ -28,7 +37,7 @@ export const ShowPokemons = ({ pokemons, onLoad }) => {
               <div>
                 {item.types.map((t) => (
                   <div key={t} className="inline-block">
-                    {TypeCheck(t)}
+                    {typeCheck(t)}
                   </div>
                 ))}
               </div>
