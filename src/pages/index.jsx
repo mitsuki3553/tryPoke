@@ -5,6 +5,7 @@ import { HomeLayout, ShowPokemons, Header, Search } from "src/components/";
 
 export default function Home() {
   const [P, setP] = useState(); //pokeAPIを使うためのメソッド入れ
+  const [pokeIndex, setPokeIndex] = useState(); //1~898までの簡略データ
   const [pokemons, setPokemons] = useState([]); //fetchした詳細データ入れ
   const [limit, setLimit] = useState(1); //取得するデータ数
   const [offset, setOffset] = useState(1); //この番号からのデータ取得
@@ -16,26 +17,54 @@ export default function Home() {
     const Poke = new Pokedex();
     setP(Poke);
     setLimit(limit - offset + 1);
+    getIndex(Poke);
   }, []);
   // console.log(`データ数：${limit}, 開始値：${offset}, 終了値：${until}`);
+
+  const getIndex = async (Poke) => {
+    setOnLoad(true);
+    const start = 0;
+    const Allpokemon = 897;
+    const res = await Poke.resource(
+      `/api/v2/pokemon?limit=${Allpokemon}&offset=${start}`
+    );
+    setPokeIndex(res.results);
+    setOnLoad(false);
+  };
 
   //データを取得
   const getPoke = async () => {
     setOnLoad(true);
-    const start = offset - 1;
-    const res = await P.resource(
-      `/api/v2/pokemon?limit=${limit}&offset=${start}`
-    );
-    console.log(res);
-    const getDetails = async (results) => {
-      let arr = [];
-      for (let item of results) {
-        const res = await P.resource(item.url);
-        arr = [...arr, res];
-      }
-      setPokemons(() => [...arr]);
-    };
-    getDetails(res["results"]);
+    let index = pokeIndex.slice(offset - 1, until);
+    let arr = [];
+    for (let item of index) {
+      const res = await P.resource(item.url);
+      //必要なデータだけ抜粋
+      const newFeature = {
+        order: res.order,
+        name: res.name,
+        height: res.height,
+        weight: res.weight,
+        sprites: res.sprites,
+        types: res.types,
+      };
+      //抜き出したデータで配列作成
+      arr = [...arr, newFeature];
+    }
+    let jp = [];
+    for (let i in index) {
+      //日本語名が入ってるデータをfetch
+      const res = await P.getPokemonSpeciesByName(index[i].name);
+      //日本語のポケモン名だけ抽出
+      const jName = await res.names[0].name;
+
+      //上で作ったデータと合体！
+      const addJp = { ...arr[i], Ja: jName };
+      // 合体したものを配列化
+      jp = [...jp, addJp];
+    }
+    setPokemons(() => [...jp]);
+    console.log(jp);
     setOnLoad(false);
   };
 

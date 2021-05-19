@@ -20,7 +20,10 @@ export const ShowPokemons = ({ pokemons, onLoad, offset }) => {
             ></img>
 
             <div style={{ fontFamily: "pokemon-font", fontSize: "8px" }}>
-              {+offset + i}.{item.name}
+              <div>
+                {item.order}.{item.Ja}
+              </div>
+              <div></div>
             </div>
             <div></div>
           </div>
