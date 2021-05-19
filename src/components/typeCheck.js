@@ -1,5 +1,5 @@
 //ポケモンのタイプを判別して日本語で返す関数
-export const TypeCheck = (t) => {
+export const typeCheck = (t) => {
   const tag = (a, b) => (
     <div className={`${a} w-16 py-1 m-1 rounded-xl`}>{b}</div>
   );
