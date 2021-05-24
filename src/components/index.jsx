@@ -3,6 +3,7 @@ export { Header } from "src/components/Header";
 export { HomeLayout } from "src/components/HomeLayout";
 export { ShowPokemons } from "src/components/ShowPokemons";
 export { typeCheck } from "src/components/typeCheck.js";
+export { addFirestore } from "src/components/addFirestore.js";
 export { Search } from "src/components/Search/Search";
 export { SearchText } from "src/components/Search/SearchText";
 export { SearchButton } from "src/components/Search/SearchButton";
