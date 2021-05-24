@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Pokedex } from "pokeapi-js-wrapper";
 
 import { HomeLayout, ShowPokemons, Header, Search } from "src/components/";
+import { getFirestore } from "src/components/addFirestore";
 
 export default function Home() {
   const [P, setP] = useState(); //pokeAPIを使うためのメソッド入れ
@@ -10,41 +11,56 @@ export default function Home() {
   const [limit, setLimit] = useState(1); //取得するデータ数
   const [offset, setOffset] = useState(1); //この番号からのデータ取得
   const [until, setUntil] = useState(1); //この番号までのデータ取得
+  const [prevPoke, setPrevPoke] = useState([]); //お気に入りで抜粋したポケモン
   const [onLoad, setOnLoad] = useState(false); //fetch中かどうか
-  const [fetchFail, setFetchFail] = useState(false); //fetchが失敗したか
+  // const [fetchFail, setFetchFail] = useState(false); //fetchが失敗したか
 
   //pokeAPIメソッドを使えるようにする
   useEffect(() => {
+    setOnLoad(true);
+    getInit();
+    getFirestore(setPrevPoke);
+    setOnLoad(false);
+  }, []);
+
+  //初期設定
+  const getInit = useCallback(() => {
     const Poke = new Pokedex();
     setP(Poke);
     setLimit(limit - offset + 1);
     getIndex(Poke);
-  }, []);
+  });
 
   const getIndex = async (Poke) => {
     setOnLoad(true);
-    try {
-      const start = 0;
-      const Allpokemon = 898; //ポケモンの種類　※フォルムチェンジなし
-      const res = await Poke.resource(
-        `/api/v2/pokemon?limit=${Allpokemon}&offset=${start}`
-      );
-      setPokeIndex(res.results);
-      setOnLoad(false);
-    } catch (error) {
-      setOnLoad(false);
-      setFetchFail(true);
-    }
+
+    const start = 0;
+    const Allpokemon = 898; //ポケモンの種類　※フォルムチェンジなし
+    const res = await Poke.resource(
+      `/api/v2/pokemon?limit=${Allpokemon}&offset=${start}`
+    );
+
+    const data = res.results.map((d, i) => {
+      return { ...d, id: i + 1 };
+    });
+
+    setPokeIndex(data);
+    setOnLoad(false);
   };
 
-  //データを取得
+  //データを取得する関数
   const getPoke = async () => {
     setOnLoad(true);
-    try {
-      let index = pokeIndex.slice(offset - 1, until);
-      let arr = [];
-      for (let item of index) {
-        const res = await P.resource(item.url);
+
+    //取得するデータのurl配列を作成
+    const index = pokeIndex.slice(offset - 1, until);
+    //取得データをfetch・配列化
+    const arr = await Promise.all(
+      index.map(async (item, i) => {
+        const res = await P.resource(item.url); //個別情報
+        //日本語名
+        const res2 = await P.getPokemonSpeciesByName(item.id);
+
         //必要なデータだけ抜粋
         const newFeature = {
           id: res.id,
@@ -53,29 +69,16 @@ export default function Home() {
           weight: res.weight,
           sprites: res.sprites,
           types: res.types.map((t) => t.type.name),
+          Japanese: res2.names[0].name,
         };
-        //抜き出したデータで配列作成
-        arr = [...arr, newFeature];
-      }
-      let jp = [];
-      for (let i in index) {
-        //日本語名が入ってるデータをfetch
-        const res = await P.getPokemonSpeciesByName(index[i].name);
-        //日本語のポケモン名だけ抽出
-        const jName = await res.names[0].name;
+        return newFeature;
+      })
+    );
 
-        //上で作ったデータと合体！
-        const addJp = { ...arr[i], Ja: jName };
-        // 合体したものを配列化
-        jp = [...jp, addJp];
-      }
-      setPokemons(() => [...jp]);
-      setOnLoad(false);
-    } catch (error) {
-      setOnLoad(false);
-      setFetchFail(true);
-    }
+    setPokemons(() => [...arr]);
+    setOnLoad(false);
   };
+
   //○番〜の入力時の処理
   const isOffset = (e) => {
     const val = e.target.value;
@@ -111,10 +114,26 @@ export default function Home() {
         <ShowPokemons
           pokemons={pokemons}
           onLoad={onLoad}
-          offset={offset}
-          fetchFail={fetchFail}
+          setPrevPoke={setPrevPoke}
+          prevPoke={prevPoke}
+          // fetchFail={fetchFail}
         />
+        <div>お気に入り</div>
+        <Data prevPoke={prevPoke} />
       </HomeLayout>
     </>
   );
 }
+
+const Data = ({ prevPoke }) => {
+  if (!prevPoke.length) {
+    return <div>読み込み。。。</div>;
+  }
+  return (
+    <div>
+      {prevPoke.map((i) => (
+        <span key={i}>No.{i}</span>
+      ))}
+    </div>
+  );
+};
