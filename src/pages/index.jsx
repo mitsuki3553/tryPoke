@@ -17,10 +17,8 @@ export default function Home() {
 
   //pokeAPIメソッドを使えるようにする
   useEffect(() => {
-    setOnLoad(true);
     getInit();
     getFirestore(setPrevPoke);
-    setOnLoad(false);
   }, []);
 
   //初期設定
@@ -47,6 +45,7 @@ export default function Home() {
     setPokeIndex(data);
     setOnLoad(false);
   };
+  console.log(pokeIndex);
 
   //データを取得する関数
   const getPoke = async () => {
@@ -97,7 +96,6 @@ export default function Home() {
       setLimit(val - offset + 1); //データ数を更新
     }
   };
-
   return (
     <>
       <HomeLayout>
@@ -119,20 +117,18 @@ export default function Home() {
           // fetchFail={fetchFail}
         />
         <div>お気に入り</div>
-        <Data prevPoke={prevPoke} />
+        <Data prevPoke={prevPoke} pokeIndex={pokeIndex} />
       </HomeLayout>
     </>
   );
 }
 
-const Data = ({ prevPoke }) => {
-  if (!prevPoke.length) {
-    return <div>読み込み。。。</div>;
-  }
+//押したポケモンをお気に入りに追加
+const Data = ({ prevPoke, pokeIndex }) => {
   return (
     <div>
       {prevPoke.map((i) => (
-        <span key={i}>No.{i}</span>
+        <span key={i}>{pokeIndex[i - 1].name}</span>
       ))}
     </div>
   );
