@@ -20,13 +20,13 @@ export const ShowPokemons = ({ pokemons, onLoad, prevPoke, setPrevPoke }) => {
   //     </div>
   //   );
   return (
-    <div className="w-full h-96 mt-5 bg-blue-50 flex flex-wrap text-center border border-green-500 overflow-y-auto h-64">
+    <div className="w-full h-96 mt-5 bg-blue-100 flex flex-wrap text-center border border-green-500 overflow-y-auto h-64">
       {pokemons.map((item, i) => {
         return (
           <div
             key={i}
             className="h-40 w-40 ml-2"
-            onClick={() => OnPreserve(prevPoke, setPrevPoke, item)}
+            // onClick={() => OnPreserve(prevPoke, setPrevPoke, item)}
           >
             <img
               src={item.sprites.front_default}
@@ -45,7 +45,6 @@ export const ShowPokemons = ({ pokemons, onLoad, prevPoke, setPrevPoke }) => {
                   </div>
                 ))}
               </div>
-              <button>保存</button>
             </div>
             <div></div>
           </div>
