@@ -29,15 +29,21 @@ export const getFirestore = async (setPrevPoke) => {
   };
   if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
-  const collection = db.collection("pokemonId");
-
-  collection.get().then((snapshot) => {
-    let arr = [];
-    snapshot.forEach((doc) => {
-      const a = doc.data().pokemonId;
-      arr = [...arr, a];
-    });
-
-    setPrevPoke(arr);
+  const reference = await db.collection("pokemonId").get();
+  const res = reference.docs.map((snapshot) => {
+    // console.log(snapshot.data().pokemonId);
+    return snapshot.data().pokemonId;
   });
+  setPrevPoke(res);
+  // ↓でも同じ
+  // console.log(res.pokemonId);
+  //   reference.then((snapshot) => {
+  //     let arr = [];
+  //     snapshot.forEach((doc) => {
+  //       const a = doc.data().pokemonId;
+  //       arr = [...arr, a];
+  //     });
+
+  //     setPrevPoke(arr);
+  //   });
 };

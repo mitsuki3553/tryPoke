@@ -116,18 +116,18 @@ export default function Home() {
           // fetchFail={fetchFail}
         />
         <div>お気に入り</div>
-        <Data prevPoke={prevPoke} pokeIndex={pokeIndex} />
+        <Fav prevPoke={prevPoke} pokeIndex={pokeIndex} />
       </HomeLayout>
     </>
   );
 }
 
 //押したポケモンをお気に入りに欄の描画
-const Data = ({ prevPoke, pokeIndex }) => {
+const Fav = ({ prevPoke, pokeIndex }) => {
   return (
     <div>
       {prevPoke.map((i) => (
-        <div className="w-1/3 text-center">
+        <div className="w-1/3 text-center" key={i}>
           <img
             className="w-12 h-12 block mx-auto"
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${i}.svg`}
