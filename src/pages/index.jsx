@@ -45,7 +45,6 @@ export default function Home() {
     setPokeIndex(data);
     setOnLoad(false);
   };
-  console.log(pokeIndex);
 
   //データを取得する関数
   const getPoke = async () => {
@@ -123,12 +122,18 @@ export default function Home() {
   );
 }
 
-//押したポケモンをお気に入りに追加
+//押したポケモンをお気に入りに欄の描画
 const Data = ({ prevPoke, pokeIndex }) => {
   return (
     <div>
       {prevPoke.map((i) => (
-        <span key={i}>{pokeIndex[i - 1].name}</span>
+        <div className="w-1/3 text-center">
+          <img
+            className="w-12 h-12 block mx-auto"
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${i}.svg`}
+          />
+          <span key={i}>{pokeIndex[i - 1].name}</span>
+        </div>
       ))}
     </div>
   );
